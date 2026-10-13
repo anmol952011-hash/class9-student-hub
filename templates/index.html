@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 9 Student Hub</title>
+    <!-- Link to CSS using Flask's url_for -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">Class 9 Hub</div>
+        <p>Your AI-powered learning companion</p>
+    </nav>
+
+    <main class="container">
+        <!-- Feature 1: Summariser -->
+   <!-- Feature 1: Summariser -->
+<section class="card">
+    <h2>📝 Chapter Summariser</h2>
+    <p class="subtitle">Paste your chapter text below to get a quick summary.</p>
+    <!-- Changed from dropdown to textarea -->
+    <textarea id="summary-input" placeholder="Paste chapter text here..."></textarea>
+    <button id="btn-summarize" class="action-btn">Summarise</button>
+    <div id="summary-output" class="output-box hidden"></div>
+</section>
+    
+        <!-- Feature 2: Mock Test Generator -->
+        <section class="card">
+            <h2>📋 Mock Test Generator</h2>
+            <p class="subtitle">Enter a topic to generate a practice test.</p>
+            <input type="text" id="mocktest-input" placeholder="e.g., Physics: Laws of Motion">
+            <button id="btn-mocktest" class="action-btn">Generate Test</button>
+            <div id="mocktest-output" class="output-box hidden"></div>
+        </section>
+
+        <!-- Feature 3: Ask a Question -->
+        <section class="card">
+            <h2>❓ Ask a Question</h2>
+            <p class="subtitle">Stuck on a doubt? Ask the AI tutor.</p>
+            <input type="text" id="question-input" placeholder="Type your question here...">
+            <button id="btn-ask" class="action-btn">Ask AI</button>
+            <div id="question-output" class="output-box hidden"></div>
+        </section>
+
+        <!-- Feature 4: NCERT Books -->
+        <section class="card">
+            <h2>📚 NCERT Books</h2>
+            <p class="subtitle">Quick links to your textbooks.</p>
+            <div class="links-container">
+                <a href="https://ncert.nic.in/textbook.php" target="_blank" class="pdf-link">Class 9 Maths PDF</a>
+                <a href="https://ncert.nic.in/textbook.php" target="_blank" class="pdf-link">Class 9 Science PDF</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Link to JavaScript using Flask's url_for -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

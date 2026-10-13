@@ -1,0 +1,150 @@
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #eef2f5; /* Light grey-blue background */
+    color: #333;
+    line-height: 1.6;
+    padding-bottom: 3rem;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #1a252f;
+    color: #fff;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar .logo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #3498db;
+    margin-bottom: 0.2rem;
+}
+
+.navbar p {
+    font-size: 0.9rem;
+    color: #bdc3c7;
+}
+
+/* Main Container */
+.container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Cards */
+.card {
+    background: #ffffff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    border-top: 4px solid #3498db;
+}
+
+.card h2 {
+    color: #2c3e50;
+    font-size: 1.3rem;
+    margin-bottom: 0.3rem;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-bottom: 1rem;
+}
+
+/* Inputs */
+textarea, input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 1rem;
+    border: 1px solid #dcdde1;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border 0.3s;
+}
+
+textarea:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+textarea {
+    height: 120px;
+    resize: vertical;
+}
+
+/* Buttons */
+.action-btn {
+    background-color: #3498db;
+    color: #ffffff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.1s;
+}
+
+.action-btn:hover {
+    background-color: #2980b9;
+}
+
+.action-btn:active {
+    transform: scale(0.98);
+}
+
+.action-btn:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+/* Output Boxes */
+.output-box {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #f8f9fa;
+    border-left: 4px solid #2ecc71;
+    border-radius: 4px;
+    white-space: pre-wrap; /* Keeps AI formatting */
+    font-size: 0.95rem;
+    color: #2c3e50;
+}
+
+.hidden {
+    display: none;
+}
+
+/* NCERT Links */
+.links-container {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.pdf-link {
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background 0.3s;
+}
+
+.pdf-link:hover {
+    background-color: #dcdde1;
+}

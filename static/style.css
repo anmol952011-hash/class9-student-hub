@@ -128,23 +128,50 @@ textarea {
     display: none;
 }
 
-/* NCERT Links */
-.links-container {
-    display: flex;
+/* --- NCERT Book Grid --- */
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: 1rem;
-    flex-wrap: wrap;
+    margin-top: 1rem;
 }
 
-.pdf-link {
-    background-color: #ecf0f1;
-    color: #2c3e50;
+.book-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
     text-decoration: none;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-weight: 500;
-    transition: background 0.3s;
+    color: #2c3e50;
+    transition: all 0.2s ease;
 }
 
-.pdf-link:hover {
-    background-color: #dcdde1;
+.book-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    border-color: #3498db;
+    background-color: #ffffff;
 }
+
+.book-card .icon {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.book-card .name {
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
+}
+
+/* Subject-specific colors (Top border) */
+.book-card.maths { border-top: 4px solid #e74c3c; }
+.book-card.science { border-top: 4px solid #2ecc71; }
+.book-card.sst { border-top: 4px solid #f39c12; }
+.book-card.english { border-top: 4px solid #9b59b6; }
+.book-card.hindi { border-top: 4px solid #3498db; }
+.book-card.sanskrit { border-top: 4px solid #e67e22; }

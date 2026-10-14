@@ -128,6 +128,38 @@ textarea {
     display: none;
 }
 
+/* NCERT Links */
+.book-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.book-grid a {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    background-color: #ecf0f1;
+    color: #2c3e50;
+    padding: 8px 16px;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    transition: background 0.3s;
+}
+
+.book-grid a:hover {
+    background-color: #dcdde1;
+}
+
+.book-grid .icon {
+    font-size: 1.2rem;
+}
+
+.book-grid .name {
+    font-weight: 500;
+}
 /* --- NCERT Book Grid --- */
 .book-grid {
     display: grid;

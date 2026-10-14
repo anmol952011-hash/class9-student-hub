@@ -138,27 +138,35 @@ textarea {
 
 .book-grid a {
     display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
     text-decoration: none;
-    background-color: #ecf0f1;
+    background-color: #f8f9fa;
     color: #2c3e50;
-    padding: 8px 16px;
+    padding: 1.5rem 1rem;
     border: 1px solid #e9ecef;
     border-radius: 8px;
-    transition: background 0.3s;
+    transition: all 0.2s ease;
 }
 
 .book-grid a:hover {
-    background-color: #dcdde1;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+    border-color: #3498db;
+    background-color: #ffffff;
 }
 
 .book-grid .icon {
-    font-size: 1.2rem;
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
 }
 
 .book-grid .name {
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-align: center;
 }
 /* --- NCERT Book Grid --- */
 .book-grid {

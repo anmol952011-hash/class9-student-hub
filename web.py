@@ -1,11 +1,37 @@
 from flask import Flask, render_template, request, jsonify
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from openai import OpenAI
+from flask_talisman import Talisman
 import json
 import os
 import re
 import hashlib
 
 app = Flask(__name__)
+
+
+app.config.update(
+    SESSION_COOKIE_SECURE=True,   # Only send over HTTPS
+    SESSION_COOKIE_HTTPONLY=True, # Prevent JS access
+    SESSION_COOKIE_SAMESITE='Lax', # CSRF protection
+)
+
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["100 per hour"], # A basic default limit
+    storage_uri="memory://",
+)
+
+IS_PRODUCTION = os.environ.get("RENDER", "false").lower() == "true"
+
+if IS_PRODUCTION:
+    print("🔒 Running in Production mode: Forcing HTTPS")
+    Talisman(app) # Defaults to force_https=True
+else:
+    print("🛠️ Running in Development mode: HTTPS disabled")
+    Talisman(app, force_https=False)
 
 # This is perfect. Keep it exactly like this.
 API_KEY = os.environ.get("GROQ_API_KEY")
@@ -148,6 +174,7 @@ def mocktest():
 
 
 @app.route('/api/ask', methods=['POST'])
+@limiter.limit("5 per minute")
 def ask_question():
     data = request.json
     question = data.get('question')

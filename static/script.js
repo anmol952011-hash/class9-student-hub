@@ -22,7 +22,7 @@ document.getElementById('btn-summarize').addEventListener('click', async () => {
         const data = await response.json();
         
         if (response.ok) {
-            outputDiv.innerText = data.result;
+            outputDiv.textContent = data.result;
         } else {
             outputDiv.innerText = "Backend Error: " + (data.error || "Unknown error");
         }

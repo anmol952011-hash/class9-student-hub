@@ -1,102 +1,291 @@
-console.log("Script.js loaded successfully!")
-;// Function to handle Summariser
-document.getElementById('btn-summarize').addEventListener('click', async () => {
-    // Get the text from the textarea
-    const text = document.getElementById('summary-input').value;
-    const outputDiv = document.getElementById('summary-output');
-    const btn = document.getElementById('btn-summarize');
+// ============================================================
+// UTILITY
+// ============================================================
+const $ = (id) => document.getElementById(id);
 
-    if (!text) return alert("Please paste some text to summarize.");
+function showError(elId, msg) {
+    const el = $(elId);
+    el.textContent = msg;
+    el.classList.remove('hidden');
+}
+
+function hideError(elId) {
+    $(elId).classList.add('hidden');
+}
+
+// ============================================================
+// AUTH STATE
+// ============================================================
+async function checkAuth() {
+    try {
+        const res = await fetch('/api/me');
+        const data = await res.json();
+        if (data.logged_in) {
+            $('email-display').textContent = data.email;
+            $('user-info').classList.remove('hidden');
+            $('guest-buttons').classList.add('hidden');
+        } else {
+            $('user-info').classList.add('hidden');
+            $('guest-buttons').classList.remove('hidden');
+        }
+    } catch (e) {
+        console.error("Auth check failed:", e);
+    }
+}
+checkAuth();
+
+// ============================================================
+// MODAL HELPERS
+// ============================================================
+function openModal(id) { $(id).classList.remove('hidden'); }
+function closeModal(id) { $(id).classList.add('hidden'); }
+
+// Close buttons
+document.querySelectorAll('[data-close]').forEach(btn => {
+    btn.addEventListener('click', () => closeModal(btn.dataset.close));
+});
+
+// Switch between modals
+document.querySelectorAll('[data-open]').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (link.dataset.close) closeModal(link.dataset.close);
+        openModal(link.dataset.open);
+    });
+});
+
+// Close on backdrop click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) overlay.classList.add('hidden');
+    });
+});
+
+// Navbar buttons
+$('btn-show-login').addEventListener('click', () => {
+    hideError('login-error');
+    openModal('login-modal');
+});
+$('btn-show-signup').addEventListener('click', () => {
+    hideError('signup-error');
+    openModal('signup-modal');
+});
+
+// ============================================================
+// LOGIN / SIGNUP / LOGOUT
+// ============================================================
+$('btn-login-submit').addEventListener('click', async () => {
+    hideError('login-error');
+    const email = $('login-email').value.trim();
+    const password = $('login-password').value;
+
+    if (!email || !password) {
+        return showError('login-error', 'Please fill in both fields.');
+    }
+
+    const btn = $('btn-login-submit');
+    btn.disabled = true;
+    btn.textContent = 'Logging in...';
+
+    try {
+        const res = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+            closeModal('login-modal');
+            $('login-email').value = '';
+            $('login-password').value = '';
+            await checkAuth();
+        } else {
+            showError('login-error', data.error || 'Login failed.');
+        }
+    } catch (e) {
+        showError('login-error', 'Network error. Try again.');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Login';
+    }
+});
+$('btn-signup-submit').addEventListener('click', async () => {
+    hideError('signup-error');
+    const email = $('signup-email').value.trim();
+    const password = $('signup-password').value;
+
+    if (!email || !password) {
+        return showError('signup-error', 'Please fill in both fields.');
+    }
+
+    const btn = $('btn-signup-submit');
+    btn.disabled = true;
+    btn.textContent = 'Creating account...';
+
+    try {
+        const res = await fetch('/api/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+            closeModal('signup-modal');
+            $('signup-email').value = '';
+            $('signup-password').value = '';
+            await checkAuth();
+        } else {
+            showError('signup-error', data.error || 'Signup failed.');
+        }
+    } catch (e) {
+        showError('signup-error', 'Network error. Try again.');
+    } finally {
+        btn.disabled = false;
+        btn.textContent = 'Sign Up';
+    }
+});
+
+$('btn-logout').addEventListener('click', async () => {
+    await fetch('/api/logout', { method: 'POST' });
+    await checkAuth();
+});
+
+// ============================================================
+// SUMMARISER
+// ============================================================
+$('btn-summarize').addEventListener('click', async () => {
+    const text = $('summary-input').value;
+    const outputDiv = $('summary-output');
+    const btn = $('btn-summarize');
+
+    if (!text || text.trim().length < 20) {
+        return alert("Please paste at least a paragraph of text.");
+    }
 
     outputDiv.classList.remove('hidden');
-    outputDiv.innerText = "⏳ Generating summary, please wait...";
+    outputDiv.textContent = "⏳ Generating summary, please wait...";
     btn.disabled = true;
 
     try {
-        const response = await fetch('/api/summarize', {
+        const res = await fetch('/api/summarize', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            // Send text instead of topic
-            body: JSON.stringify({ text: text }) 
+            body: JSON.stringify({ text })
         });
-        const data = await response.json();
-        
-        if (response.ok) {
-            outputDiv.textContent = data.result;
-        } else {
-            outputDiv.innerText = "Backend Error: " + (data.error || "Unknown error");
-        }
-    } catch (error) {
-        outputDiv.innerText = "Network Error: Could not reach the Python server.";
+        const data = await res.json();
+        outputDiv.textContent = res.ok ? data.result : "Error: " + (data.error || "Unknown");
+    } catch (e) {
+        outputDiv.textContent = "Network error. Please try again.";
     } finally {
         btn.disabled = false;
     }
 });
-// Function to handle Mock Test
-document.getElementById('btn-mocktest').addEventListener('click', async () => {
-    const topic = document.getElementById('mocktest-input').value;
-    const outputDiv = document.getElementById('mocktest-output');
-    const btn = document.getElementById('btn-mocktest');
+
+// ============================================================
+// MOCK TEST
+// ============================================================
+$('btn-mocktest').addEventListener('click', async () => {
+    const topic = $('mocktest-input').value;
+    const outputDiv = $('mocktest-output');
+    const btn = $('btn-mocktest');
 
     if (!topic) return alert("Please enter a topic.");
 
     outputDiv.classList.remove('hidden');
-    outputDiv.innerText = "⏳ Generating mock test, please wait...";
+    outputDiv.textContent = "⏳ Generating mock test...";
     btn.disabled = true;
 
     try {
-        const response = await fetch('/api/mocktest', {
+        const res = await fetch('/api/mocktest', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ topic: topic })
+            body: JSON.stringify({ topic })
         });
-        const data = await response.json();
-        outputDiv.innerText = data.result || data.error;
-    } catch (error) {
-        outputDiv.innerText = "Error connecting to the server.";
+        const data = await res.json();
+        outputDiv.textContent = res.ok ? data.result : "Error: " + (data.error || "Unknown");
+    } catch (e) {
+        outputDiv.textContent = "Network error. Please try again.";
     } finally {
         btn.disabled = false;
     }
 });
 
-// Function to handle Q&A
-document.getElementById('btn-ask').addEventListener('click', async () => {
-    const question = document.getElementById('question-input').value;
-    const outputDiv = document.getElementById('question-output');
-    const btn = document.getElementById('btn-ask');
+// ============================================================
+// ASK AI (main page)
+// ============================================================
+$('btn-ask').addEventListener('click', async () => {
+    const question = $('question-input').value;
+    const outputDiv = $('question-output');
+    const btn = $('btn-ask');
 
     if (!question) return alert("Please type a question.");
 
     outputDiv.classList.remove('hidden');
-    outputDiv.innerText = "⏳ Searching knowledge base...";
+    outputDiv.textContent = "⏳ Thinking...";
     btn.disabled = true;
 
-    // If it takes more than 1.5 seconds, update the text to let them know it's calling the AI
-    const timer = setTimeout(() => {
-        outputDiv.innerText = "this may take a few seconds...";
-    }, 1500);
-
     try {
-        const response = await fetch('/api/ask', {
+        const res = await fetch('/api/ask', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ question: question })
+            body: JSON.stringify({ question })
         });
-        
-        clearTimeout(timer); // Stop the timer because we got a response
-        
-        const data = await response.json();
-        
-        if (response.ok) {
-            outputDiv.innerText = data.result;
-        } else {
-            outputDiv.innerText = "Backend Error: " + (data.error || "Unknown error");
-        }
-        
-    } catch (error) {
-        clearTimeout(timer);
-        outputDiv.innerText = "Network Error: Could not reach the Python server.";
+        const data = await res.json();
+        outputDiv.textContent = res.ok ? data.result : "Error: " + (data.error || "Unknown");
+    } catch (e) {
+        outputDiv.textContent = "Network error. Please try again.";
     } finally {
         btn.disabled = false;
     }
+});
+
+// Allow Enter key on the question input
+$('question-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') $('btn-ask').click();
+});
+
+// ============================================================
+// FLOATING CHAT
+// ============================================================
+$('fab-ask').addEventListener('click', () => {
+    openModal('fab-modal');
+    $('fab-input').focus();
+});
+
+function appendChat(text, cls) {
+    const msg = document.createElement('div');
+    msg.className = `chat-msg ${cls}`;
+    msg.textContent = text;
+    $('fab-chat').appendChild(msg);
+    $('fab-chat').scrollTop = $('fab-chat').scrollHeight;
+    return msg;
+}
+
+async function sendFabQuestion() {
+    const input = $('fab-input');
+    const question = input.value.trim();
+    if (!question) return;
+
+    appendChat(question, 'user');
+    input.value = '';
+    const thinking = appendChat("Thinking...", 'ai thinking');
+
+    try {
+        const res = await fetch('/api/ask', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ question })
+        });
+        const data = await res.json();
+        thinking.classList.remove('thinking');
+        thinking.textContent = res.ok ? data.result : "Error: " + (data.error || "Unknown");
+    } catch (e) {
+        thinking.classList.remove('thinking');
+        thinking.textContent = "Network error. Please try again.";
+    }
+}
+
+$('fab-send').addEventListener('click', sendFabQuestion);
+$('fab-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendFabQuestion();
 });

@@ -3,64 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Class 9 Student Hub</title>
-    <meta name="google-site-verification" content="jucG9uIvZiTJt2fG2MSFwt4nXj18WcpvAavTy3Ro2dI" />
-    <!-- Link to CSS using Flask's url_for -->
+    <title>Class 9 Hub — AI Study Companion</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
+    <!-- ===== NAVBAR ===== -->
     <nav class="navbar">
-        <div class="logo">Class 9 Hub</div>
-        <p>Your AI-powered learning companion</p>
+        <div class="nav-container">
+            <a href="/" class="logo">📚 Class 9 Hub</a>
+            <div class="nav-right">
+                <div id="user-info" class="user-info hidden">
+                    <span class="user-badge">👤 <span id="username-display"></span></span>
+                    <button id="btn-logout" class="btn-ghost">Logout</button>
+                </div>
+                <div id="guest-buttons" class="guest-buttons">
+                    <button id="btn-show-login" class="btn-ghost">Login</button>
+                    <button id="btn-show-signup" class="btn-primary">Sign Up</button>
+                </div>
+            </div>
+        </div>
     </nav>
 
+    <!-- ===== HERO ===== -->
+    <header class="hero">
+        <h1>Your AI-Powered Study Partner</h1>
+        <p>Summarize chapters, generate mock tests, and get instant answers — all in one place.</p>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
     <main class="container">
-        <!-- Feature 1: Summariser -->
-   <!-- Feature 1: Summariser -->
-<section class="card">
-    <h2>📝 Chapter Summariser</h2>
-    <p class="subtitle">Paste your chapter text below to get a quick summary.</p>
-    <!-- Changed from dropdown to textarea -->
-    <textarea id="summary-input" placeholder="Paste chapter text here..."></textarea>
-    <button id="btn-summarize" class="action-btn">Summarise</button>
-    <div id="summary-output" class="output-box hidden"></div>
-</section>
-    
-        <!-- Feature 2: Mock Test Generator -->
+
+        <section class="card">
+            <h2>📝 Chapter Summariser</h2>
+            <p class="subtitle">Paste any chapter text to get an instant summary.</p>
+            <textarea id="summary-input" placeholder="Paste your chapter text here..."></textarea>
+            <button id="btn-summarize" class="action-btn">✨ Summarise</button>
+            <div id="summary-output" class="output-box hidden"></div>
+        </section>
+
         <section class="card">
             <h2>📋 Mock Test Generator</h2>
-            <p class="subtitle">Enter a topic to generate a practice test.</p>
+            <p class="subtitle">Enter a topic and get a practice test with an answer key.</p>
             <input type="text" id="mocktest-input" placeholder="e.g., Physics: Laws of Motion">
-            <button id="btn-mocktest" class="action-btn">Generate Test</button>
+            <button id="btn-mocktest" class="action-btn">🎯 Generate Test</button>
             <div id="mocktest-output" class="output-box hidden"></div>
         </section>
 
-        <!-- Feature 3: Ask a Question -->
         <section class="card">
             <h2>❓ Ask a Question</h2>
-            <p class="subtitle">Stuck on a doubt? Ask the AI tutor.</p>
-            <input type="text" id="question-input" placeholder="Type your question here...">
-            <button id="btn-ask" class="action-btn">Ask AI</button>
+            <p class="subtitle">Stuck on a doubt? Ask your AI tutor anything from your syllabus.</p>
+            <div class="ask-row">
+                <input type="text" id="question-input" placeholder="Type your question here...">
+                <button id="btn-ask" class="action-btn">🤖 Ask AI</button>
+            </div>
             <div id="question-output" class="output-box hidden"></div>
         </section>
 
-        <!-- Feature 4: NCERT Books -->
-                <!-- Feature 4: NCERT Books -->
         <section class="card">
             <h2>📚 NCERT Book Library</h2>
-            <p class="subtitle">Quick link to download your Class 9 textbooks.</p>
-            
+            <p class="subtitle">Official textbook links for Class 9.</p>
             <div class="book-grid">
-                <a href="https://ncert.nic.in/textbook.php" target="_blank" class="book-card Books">
-                    <span class="icon">📚</span>
-                    <span class="name">Books</span>
+                <a href="https://ncert.nic.in/textbook.php" target="_blank" class="book-card">
+                    <span class="icon">📐</span><span class="name">Maths</span>
+                </a>
+                <a href="https://ncert.nic.in/textbook.php" target="_blank" class="book-card">
+                    <span class="icon">🔬</span><span class="name">Science</span>
+                </a>
+                <a href="https://ncert.nic.in/textbook.php" target="_blank" class="book-card">
+                    <span class="icon">🌍</span><span class="name">Social Science</span>
+                </a>
+                <a href="https://ncert.nic.in/textbook.php" target="_blank" class="book-card">
+                    <span class="icon">📖</span><span class="name">English</span>
+                </a>
+                <a href="https://ncert.nic.in/textbook.php" target="_blank" class="book-card">
+                    <span class="icon">🇮🇳</span><span class="name">Hindi</span>
+                </a>
+                <a href="https://ncert.nic.in/textbook.php" target="_blank" class="book-card">
+                    <span class="icon">🕉️</span><span class="name">Sanskrit</span>
                 </a>
             </div>
         </section>
+
     </main>
 
-    <!-- Link to JavaScript using Flask's url_for -->
+    <!-- ===== FLOATING ASK AI BUTTON ===== -->
+    <button id="fab-ask" class="fab" title="Ask AI">🤖</button>
+
+    <!-- ===== FLOATING ASK AI MODAL ===== -->
+    <div id="fab-modal" class="modal-overlay hidden">
+        <div class="modal fab-modal">
+            <div class="modal-header">
+                <h3>🤖 Quick Ask AI</h3>
+                <button class="close-btn" data-close="fab-modal">✕</button>
+            </div>
+            <div class="fab-chat" id="fab-chat"></div>
+            <div class="fab-input-row">
+                <input type="text" id="fab-input" placeholder="Ask a question...">
+                <button id="fab-send" class="action-btn">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="login-modal" class="modal-overlay hidden">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Welcome Back</h3>
+            <button class="close-btn" data-close="login-modal">✕</button>
+        </div>
+        <!-- CHANGED: type="email" and placeholder -->
+        <input type="email" id="login-email" placeholder="Email address">
+        <input type="password" id="login-password" placeholder="Password">
+        <button id="btn-login-submit" class="action-btn full-width">Login</button>
+        <p class="modal-footer-text">
+            Don't have an account? <a href="#" data-open="signup-modal" data-close="login-modal">Sign up</a>
+        </p>
+        <div id="login-error" class="error-msg hidden"></div>
+    </div>
+</div>
+    <!-- ===== SIGNUP MODAL ===== -->
+<div id="signup-modal" class="modal-overlay hidden">
+    <div class="modal">
+        <div class="modal-header">
+            <h3>Create Account</h3>
+            <button class="close-btn" data-close="signup-modal">✕</button>
+        </div>
+        <!-- CHANGED: type="email" and placeholder -->
+        <input type="email" id="signup-email" placeholder="Email address">
+        <input type="password" id="signup-password" placeholder="Password (min 6 chars)">
+        <button id="btn-signup-submit" class="action-btn full-width">Sign Up</button>
+        <p class="modal-footer-text">
+            Already have an account? <a href="#" data-open="login-modal" data-close="signup-modal">Login</a>
+        </p>
+        <div id="signup-error" class="error-msg hidden"></div>
+    </div>
+</div>
+
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

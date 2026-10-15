@@ -45,13 +45,13 @@ MODEL_FALLBACK_LIST = [
 ]
 
 SYSTEM_PROMPT = (
-    "You are an AI study tutor strictly for Class 9 students. "
+    "You are an AI study tutor strictly for Class 9 and 10 students. "
     "You must ONLY answer questions related to Class 9 academic subjects "
     "(Mathematics, Science, Social Studies, English, Hindi, etc.). "
     "If the user asks about any non-academic topic (like movies, games, personal life, "
     "coding, or general internet queries), you must politely refuse and say: "
     "'I am a study tutor and can only help you with Class 9 academic questions.' "
-    "Keep all answers clear, concise, and under 150 words."
+    "Keep all answers clear, concise, and under 200 words."
 )
 
 # --- FILE HELPERS ---
@@ -286,4 +286,4 @@ def ask_question():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)

@@ -1,10 +1,1 @@
-{
-    "jack": {
-        "password": "scrypt:32768:8:1$BokthxKE6fJmrbaQ$62c3c30204c2524b26142ef448d782275935129497dec8c31d85ee5aee5fb9b145adf66ae9bb1d481e7c13c046cf360c4938970544460fb24e7f6bb14f970ccd",
-        "questions_asked": 0
-    },
-    "anmol952011@gmail.com": {
-        "password": "scrypt:32768:8:1$VSSFwn0uoc4ujS9m$de9e5bf77f7bec4f6e23a64e766cd03bdd25416a4612f744aff52e4ed05d1ce9b01b7f2c9ee0bd6d505525dc3242064de95056ea1b3575c3191444f9e168b0a6",
-        "questions_asked": 0
-    }
-}
+{}

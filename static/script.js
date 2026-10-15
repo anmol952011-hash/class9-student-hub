@@ -1,6 +1,4 @@
-// ============================================================
-// UTILITY
-// ============================================================
+
 const $ = (id) => document.getElementById(id);
 
 function showError(elId, msg) {
@@ -13,9 +11,7 @@ function hideError(elId) {
     $(elId).classList.add('hidden');
 }
 
-// ============================================================
-// AUTH STATE
-// ============================================================
+
 async function checkAuth() {
     try {
         const res = await fetch('/api/me');
@@ -34,18 +30,16 @@ async function checkAuth() {
 }
 checkAuth();
 
-// ============================================================
-// MODAL HELPERS
-// ============================================================
+
 function openModal(id) { $(id).classList.remove('hidden'); }
 function closeModal(id) { $(id).classList.add('hidden'); }
 
-// Close buttons
+
 document.querySelectorAll('[data-close]').forEach(btn => {
     btn.addEventListener('click', () => closeModal(btn.dataset.close));
 });
 
-// Switch between modals
+
 document.querySelectorAll('[data-open]').forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
@@ -54,14 +48,14 @@ document.querySelectorAll('[data-open]').forEach(link => {
     });
 });
 
-// Close on backdrop click
+
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
     overlay.addEventListener('click', (e) => {
         if (e.target === overlay) overlay.classList.add('hidden');
     });
 });
 
-// Navbar buttons
+
 $('btn-show-login').addEventListener('click', () => {
     hideError('login-error');
     openModal('login-modal');
@@ -71,9 +65,7 @@ $('btn-show-signup').addEventListener('click', () => {
     openModal('signup-modal');
 });
 
-// ============================================================
-// LOGIN / SIGNUP / LOGOUT
-// ============================================================
+
 $('btn-login-submit').addEventListener('click', async () => {
     hideError('login-error');
     const email = $('login-email').value.trim();
@@ -150,9 +142,6 @@ $('btn-logout').addEventListener('click', async () => {
     await checkAuth();
 });
 
-// ============================================================
-// SUMMARISER
-// ============================================================
 $('btn-summarize').addEventListener('click', async () => {
     const text = $('summary-input').value;
     const outputDiv = $('summary-output');
@@ -181,9 +170,6 @@ $('btn-summarize').addEventListener('click', async () => {
     }
 });
 
-// ============================================================
-// MOCK TEST
-// ============================================================
 $('btn-mocktest').addEventListener('click', async () => {
     const topic = $('mocktest-input').value;
     const outputDiv = $('mocktest-output');
@@ -210,9 +196,6 @@ $('btn-mocktest').addEventListener('click', async () => {
     }
 });
 
-// ============================================================
-// ASK AI (main page)
-// ============================================================
 $('btn-ask').addEventListener('click', async () => {
     const question = $('question-input').value;
     const outputDiv = $('question-output');
@@ -239,14 +222,10 @@ $('btn-ask').addEventListener('click', async () => {
     }
 });
 
-// Allow Enter key on the question input
 $('question-input').addEventListener('keypress', (e) => {
     if (e.key === 'Enter') $('btn-ask').click();
 });
 
-// ============================================================
-// FLOATING CHAT
-// ============================================================
 $('fab-ask').addEventListener('click', () => {
     openModal('fab-modal');
     $('fab-input').focus();

@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "web.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "web.py"
+    }
+  ]
+}

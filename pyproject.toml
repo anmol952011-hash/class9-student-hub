@@ -1,2 +1,15 @@
+[project]
+name = "class-9-hub"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "Flask",
+    "openai",
+    "gunicorn",
+    "flask-limiter",
+    "flask-talisman",
+    "werkzeug",
+]
+
 [tool.vercel]
 entrypoint = "web:app"

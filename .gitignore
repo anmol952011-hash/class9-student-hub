@@ -2,3 +2,5 @@ __pycache__/
 *.pyc
 .env
 venv/
+users.json
+summaries_cache.json
